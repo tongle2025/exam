@@ -1,0 +1,28 @@
+package com.zzu.exam.entity;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
+import java.util.Date;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class User implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    private String id;
+    private String userName;
+    private String password;
+    private Integer role;
+
+    //@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date createTime;
+    private Date updateTime;
+    private Date lastActiveTime;
+}
