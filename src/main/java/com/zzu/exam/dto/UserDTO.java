@@ -6,10 +6,13 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-@Schema(description = "用户信息")
+@Schema(description = "用户持久层")
 public class UserDTO implements Serializable {
+    @Schema(description = "用户id")
+    private String id;
+
     @Schema(description = "用户名")
-    private String username;
+    private String userName;
 
     @Schema(description = "密码")
     private String password;

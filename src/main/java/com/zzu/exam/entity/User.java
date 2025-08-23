@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -22,7 +23,7 @@ public class User implements Serializable {
     private Integer role;
 
     //@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date createTime;
-    private Date updateTime;
-    private Date lastActiveTime;
+    private LocalDateTime createTime;
+    private LocalDateTime updateTime;
+    private LocalDateTime lastActiveTime;
 }

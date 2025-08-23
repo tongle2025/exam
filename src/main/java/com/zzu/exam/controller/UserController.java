@@ -3,12 +3,14 @@ package com.zzu.exam.controller;
 
 import com.zzu.exam.config.JwtConfig;
 import com.zzu.exam.constant.JwtClaimsConstant;
+import com.zzu.exam.context.BaseContext;
 import com.zzu.exam.dto.UserDTO;
 import com.zzu.exam.entity.User;
 import com.zzu.exam.result.Result;
 import com.zzu.exam.service.UserService;
 import com.zzu.exam.utils.JwtUtil;
 import com.zzu.exam.vo.UserLoginVO;
+import com.zzu.exam.vo.UserRegisterVO;
 import com.zzu.exam.vo.UserUpdateVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -36,10 +38,17 @@ public class UserController {
     @PostMapping("/register")
     @Operation(summary = "用户注册")
     public Result register(@RequestBody UserDTO userDTO){
-        log.info("用户注册：{}", userDTO);
-        // userService.register(userDTO);
+        log.info("用户注册：{} 注册人id：{}", userDTO, BaseContext.getCurrentId());
+        User user = userService.register(userDTO);
 
-        return Result.success();
+        UserRegisterVO userRegisterVO = UserRegisterVO.builder()
+                .id(user.getId())
+                .username(user.getUserName())
+                .password(user.getPassword())
+                .createTime(user.getCreateTime())
+                .updateTime(user.getUpdateTime())
+                .build();
+        return Result.success(userRegisterVO, "register success");
 }
 
     @PostMapping("/login")

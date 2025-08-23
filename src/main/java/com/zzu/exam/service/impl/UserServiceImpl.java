@@ -1,6 +1,7 @@
 package com.zzu.exam.service.impl;
 
 import com.zzu.exam.constant.MessageConstant;
+import com.zzu.exam.constant.PasswordConstant;
 import com.zzu.exam.dto.UserDTO;
 import com.zzu.exam.entity.User;
 import com.zzu.exam.exception.AccountLockedException;
@@ -8,6 +9,7 @@ import com.zzu.exam.exception.AccountNotFoundException;
 import com.zzu.exam.exception.PasswordErrorException;
 import com.zzu.exam.mapper.UserMapper;
 import com.zzu.exam.service.UserService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
@@ -22,11 +24,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User login(UserDTO userDTO) {
-        String username = userDTO.getUsername();
+        String id = userDTO.getId();
         String password = userDTO.getPassword();
+        //获取localtime
+        LocalDateTime localtime = LocalDateTime.now();
 
         // 1、根据用户名查询数据库中的数据
-        User user = userMapper.getByUsername(username);
+        User user = userMapper.getById(id);
 
         // 2、处理各种异常情况（用户名不存在、密码不对、账号被锁定）
         if (user == null) {
@@ -47,27 +51,46 @@ public class UserServiceImpl implements UserService {
         //     throw new AccountLockedException(MessageConstant.ACCOUNT_LOCKED);
         // }
 
+        userMapper.updateLastActiveTime(id, localtime);
+
         // 3、返回实体对象
         return user;
     }
 
     @Override
     public User update(UserDTO userDTO) {
-        String username = userDTO.getUsername();
+        String id = userDTO.getId();
         String password = userDTO.getPassword();
         // 1、根据用户名查询数据库中的数据
-        User user = userMapper.getByUsername(username);
+        User user = userMapper.getById(id);
 
         // 2、处理各种异常情况（用户名不存在、密码不对、账号被锁定）
         if (user == null) {
             // 账号不存在
             throw new AccountNotFoundException(MessageConstant.ACCOUNT_NOT_FOUND);
         }
-        //获取localtime
-        LocalDateTime localtime = LocalDateTime.now();
         password = DigestUtils.md5DigestAsHex(password.getBytes());
-        userMapper.updatePassword(username, password, localtime);
-        user = userMapper.getByUsername(username);
+        userMapper.updatePassword(id, password, LocalDateTime.now());
+        user = userMapper.getById(id);
+        return user;
+    }
+
+    @Override
+    public User register(UserDTO userDTO) {
+        User user = new User();
+
+        //对象属性拷贝
+        BeanUtils.copyProperties(userDTO, user);
+
+        //默认密码123456且加密
+        user.setPassword(DigestUtils.md5DigestAsHex(PasswordConstant.DEFAULT_PASSWORD.getBytes()) );
+
+        user.setCreateTime(LocalDateTime.now());
+        user.setUpdateTime(LocalDateTime.now());
+
+        userMapper.insert(user);
+
+        user = userMapper.getById(user.getId());
         return user;
     }
 }

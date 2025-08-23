@@ -43,3 +43,6 @@ exam:
 mybatis:
   mapper-locations: classpath:mapper/*.xml
   type-aliases-package: com.zzu.exam.entity
+  configuration:
+    #开启驼峰命名
+    map-underscore-to-camel-case: true
