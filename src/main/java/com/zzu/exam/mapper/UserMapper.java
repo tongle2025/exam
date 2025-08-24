@@ -1,5 +1,7 @@
 package com.zzu.exam.mapper;
 
+import com.github.pagehelper.Page;
+import com.zzu.exam.dto.UserPageQueryDTO;
 import com.zzu.exam.entity.User;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -27,5 +29,19 @@ public interface UserMapper {
             "values " +
             "(#{id}, #{userName}, #{password}, #{createTime}, #{updateTime})")
     void insert(User user);
+
+
+    /**
+     * 分页查询用户
+     * @param userPageQueryDTO
+     * @return
+     */
+    Page<User> pageQuery(UserPageQueryDTO userPageQueryDTO);
+
+    /**
+     * 根据主键动态修改用户信息
+     * @param user
+     */
+    void update(User user);
 }
 
