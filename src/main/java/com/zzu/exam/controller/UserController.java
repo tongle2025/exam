@@ -39,7 +39,7 @@ public class UserController {
     @Operation(summary = "用户注册")
     public Result register(@RequestBody UserDTO userDTO) {
         log.info("用户注册：{} 注册人id：{}", userDTO, BaseContext.getCurrentId());
-        User user = userService.register(userDTO);
+        User user = userService.insert(userDTO);
 
         UserRegisterVO userRegisterVO = UserRegisterVO.builder()
                 .id(user.getId())

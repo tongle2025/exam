@@ -1,8 +1,11 @@
 package com.zzu.exam.mapper;
 
 import com.github.pagehelper.Page;
+import com.zzu.exam.annotation.AutoFill;
 import com.zzu.exam.dto.UserPageQueryDTO;
+import com.zzu.exam.entity.OperationType;
 import com.zzu.exam.entity.User;
+import io.swagger.v3.oas.annotations.Operation;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -25,9 +28,10 @@ public interface UserMapper {
             "where id = #{id}")
     void updateLastActiveTime(String id, LocalDateTime lastActiveTime);
 
-    @Insert("insert into user (id, user_name, password, create_time, update_time) " +
+    @Insert("insert into user (id, user_name, password) " +
             "values " +
-            "(#{id}, #{userName}, #{password}, #{createTime}, #{updateTime})")
+            "(#{id}, #{userName}, #{password})")
+    @AutoFill(OperationType.INSERT)
     void insert(User user);
 
 
@@ -42,6 +46,7 @@ public interface UserMapper {
      * 根据主键动态修改用户信息
      * @param user
      */
+    @AutoFill(OperationType.UPDATE)
     void update(User user);
 }
 

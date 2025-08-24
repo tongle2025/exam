@@ -2,10 +2,12 @@ package com.zzu.exam.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.zzu.exam.annotation.AutoFill;
 import com.zzu.exam.constant.MessageConstant;
 import com.zzu.exam.constant.PasswordConstant;
 import com.zzu.exam.dto.UserDTO;
 import com.zzu.exam.dto.UserPageQueryDTO;
+import com.zzu.exam.entity.OperationType;
 import com.zzu.exam.entity.User;
 import com.zzu.exam.exception.AccountLockedException;
 import com.zzu.exam.exception.AccountNotFoundException;
@@ -65,14 +67,11 @@ public class UserServiceImpl implements UserService {
     public void update(UserDTO userDTO) {
         User user = new User();
         BeanUtils.copyProperties(userDTO, user);
-
-        user.setUpdateTime(LocalDateTime.now());
-
         userMapper.update(user);
     }
 
     @Override
-    public User register(UserDTO userDTO) {
+    public User insert(UserDTO userDTO) {
         User user = new User();
 
         // 对象属性拷贝
@@ -80,10 +79,6 @@ public class UserServiceImpl implements UserService {
 
         // 默认密码123456且加密
         user.setPassword(DigestUtils.md5DigestAsHex(PasswordConstant.DEFAULT_PASSWORD.getBytes()));
-
-        user.setCreateTime(LocalDateTime.now());
-        user.setUpdateTime(LocalDateTime.now());
-
         userMapper.insert(user);
 
         user = userMapper.getById(user.getId());

@@ -8,7 +8,7 @@ import com.zzu.exam.result.PageResult;
 public interface UserService {
     User login(UserDTO userDTO);
     void update(UserDTO userDTO);
-    User register(UserDTO userDTO);
+    User insert(UserDTO userDTO);
 
 
     /**
