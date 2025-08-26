@@ -1,6 +1,8 @@
 spring:
   application:
     name: exam
+  profiles:
+    active: dev
   devtools:
     restart:
       enabled: true  #设置开启热部署
@@ -11,6 +13,10 @@ spring:
     username: root
     password: "056519"
     driver-class-name: com.mysql.cj.jdbc.Driver
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
 
 # springdoc-openapi
 springdoc:
